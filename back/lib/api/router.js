@@ -9,6 +9,30 @@ const asyncMiddleware = fn => (
 )
 
 export const createRoutes = (app) => {
+  // list all tables
+  app.get('/_table', asyncMiddleware(async (req, res, next) => {
+    res.json({
+      data: TABLES.map(t => ({...t, fullName: t.fullName})),
+    })
+  }))
+
+  // add new table
+  app.post('/_table', asyncMiddleware(async (req, res, next) => {
+    try {
+      const t = new Table({
+        ...req.body,
+        internal: false,
+        columns: req.body.columns.map(c => new Column({...c}))
+      })
+      await t.create()
+      res.sendStatus(200)
+    } catch(e) {
+      console.error(e);
+      res.sendStatus(400)
+    }
+  }))
+
+
   for(let table of TABLES) {
     const routeName = table.internal ? '/internal/' + table.name : '/'+ table.name
 
