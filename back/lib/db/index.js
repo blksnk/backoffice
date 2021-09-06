@@ -100,7 +100,59 @@ export const verifyDefaults = async () => {
       }),
     ],
   })
+  const userTable = new Table({
+    name: 'users',
+    internal: true,
+    ifNotExists: true,
+    columns: [
+      new Column({
+        name: 'username',
+        type: 'text',
+        constraints: [],
+      }),
+      new Column({
+        name: 'email',
+        type: 'text',
+        constraints: ['not null', 'unique'],
+      }),
+      new Column({
+        name: 'password',
+        type: 'text',
+        constraints: ['not null'],
+      }),
+      new Column({
+        name: 'organisations',
+        type: 'uuid[]',
+        constraints: []
+      })
+    ]
+  })
+
+  const orgaTable = new Table({
+    name: 'organisations',
+    internal: true,
+    ifNotExists: true,
+    columns: [
+      new Column({
+        name: 'name',
+        type: 'text',
+        constraints: ['not null'],
+      }),
+      new Column({
+        name: 'email',
+        type: 'text',
+        constraints: ['not null', 'unique'],
+      }),
+      new Column({
+        name: 'author_id',
+        type: 'uuid',
+        constraints: ['not null']
+      })
+    ]
+  })
   
   mediaTable.create();
-  return true;
+  userTable.create();
+  orgaTable.create();
+  return true; 
 }
