@@ -3,8 +3,8 @@ import { q, tableName } from './index.js'
 
 export default class Table {
   constructor(options) {
-    this.name = options.name || null;
-    this.ifNotExists = options.ifNotExists || false;
+    this.name = options.name ? options.name.toLowerCase() : null;
+    this.ifNotExists = options.ifNotExists || true;
     this.internal = options.internal || false;
     this.columns = [
       new TsColumn(),
@@ -25,7 +25,7 @@ export default class Table {
   }
   
   setName(name) {
-    this.name = name;
+    this.name = name.toLowerCase();
     return this;
   }
   
@@ -79,16 +79,17 @@ export default class Table {
   }
 
   findColumn(name) {
+    if(!name) throw new Error('Table.findColumn: no name provided.')
     return this.columns.find(c => c.name === name)
   }
 
-  insert(data = {}) {
+  insertRow(data = {}) {
     const props = Object.keys(data);
     const vals = Object.values(data).map((v, i) => this.formatValue(v, this.findColumn(props[i])))
     return q(`INSERT INTO "${this.fullName}" (${props.join(', ')}) VALUES (${vals.join(', ')})`)
   }
 
-  update(id, data) {
+  updateRow(id, data) {
     const names = this.columns.map(c => c.name);
     const props = Object.keys(data);
 
@@ -100,6 +101,11 @@ export default class Table {
     } else {
       throw new Error('Table.update: unknown column specified')
     }
+  }
+
+  deleteRow(id) {
+    if(!id) throw new Error('Table.deleteRow: no id spécified')
+    return q(`DELETE FROM "${this.fullName}" WHERE _id = '${id}'`)
   }
 
 }
