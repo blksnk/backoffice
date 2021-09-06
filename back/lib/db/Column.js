@@ -44,9 +44,9 @@ export default class Column {
 
   setType(t) {
     const type = t.toUpperCase()
-    const types = ['BIGINT', 'BIGSERIAL', 'BIT', 'BIT VARYING', 'BOOLEAN', 'BOX', 'BYTEA', 'CHARACTER', 'CHARACTER VARYING', 'CIDR', 'CIRCLE', 'DATE', 'DOUBLE PRECISION', 'FLOAT8', 'INET', 'INTEGER', 'INVERVAL', 'JSON', 'JSONB', 'LINE', 'LSEG', 'MACADDR', 'MONEY', 'NUMERIC', 'PATH', 'PG_LSN', 'POINT', 'POLYGON', 'REAL', 'SMALLINT', 'SMALLSERIAL', 'SERIAL', 'TEXT', 'TIME', 'TIMETZ', 'TIMESTAMP', 'TIMESTAMP WITH TIME ZONE', 'TIMESTAMPTZ', 'TSQUERY', 'TSVECTOR', 'TXID_SNAPSHOT', 'UUID', 'XML']
+    const types = ['BIGINT', 'ARRAY', 'BIGSERIAL', 'BIT', 'BIT VARYING', 'BOOLEAN', 'BOX', 'BYTEA', 'CHARACTER', 'CHARACTER VARYING', 'CIDR', 'CIRCLE', 'DATE', 'DOUBLE PRECISION', 'FLOAT8', 'INET', 'INTEGER', 'INVERVAL', 'JSON', 'JSONB', 'LINE', 'LSEG', 'MACADDR', 'MONEY', 'NUMERIC', 'PATH', 'PG_LSN', 'POINT', 'POLYGON', 'REAL', 'SMALLINT', 'SMALLSERIAL', 'SERIAL', 'TEXT', 'TIME', 'TIMETZ', 'TIMESTAMP', 'TIMESTAMP WITH TIME ZONE', 'TIMESTAMPTZ', 'TSQUERY', 'TSVECTOR', 'TXID_SNAPSHOT', 'UUID', 'XML']
     
-    if(types.includes(type)) {
+    if(types.includes(type) || types.map(ty => ty + '[]').includes(type)) {
       this.type = type
     } else throw new Error('Column: invalid type: "' + type + '"')
 
