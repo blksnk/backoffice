@@ -70,5 +70,15 @@ export const createRoutes = (app) => {
         res.sendStatus(400)
       }
     }))
+
+    app.delete(routeName + '/:id', asyncMiddleware(async (req, res, next) => {
+      try {
+        await table.deleteRow(req.params.id)
+        res.sendStatus(200)
+      } catch(e) {
+        console.error(e),
+        res.sendStatus(400)
+      }
+    }))
   }
 }
