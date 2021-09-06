@@ -1,4 +1,6 @@
 import { TABLES } from '../db/index.js';
+import Table from '../db/Table.js';
+import Column from '../db/Column.js';
 
 const asyncMiddleware = fn => (
   (req, res, next) => {
@@ -54,7 +56,7 @@ export const createRoutes = (app) => {
 
     app.post(routeName, asyncMiddleware(async (req, res, next) => {
       if(table.validate(req.body)) {
-        await table.insert(req.body)
+        await table.insertRow(req.body)
         res.sendStatus(200)
       } else {
         res.sendStatus(400)
@@ -63,7 +65,7 @@ export const createRoutes = (app) => {
 
     app.put(routeName + '/:id', asyncMiddleware(async (req, res, next) => {
       try {
-        await table.update(req.params.id, req.body)
+        await table.updateRow(req.params.id, req.body)
         res.sendStatus(200)
       } catch(e) {
         console.error(e);
